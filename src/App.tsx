@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useEffect, useState} from 'react';
 import styled from '@emotion/styled/macro';
 import Skeleton from "./components/Skeleton";
 
@@ -46,6 +46,19 @@ const Description = styled.p`
     font-size: 16px;
 `;
 
+const Placeholder: React.FC = () => ( // <Item /> 에 대응하는 Placeholder 제작
+    <Container>
+        <ImageWrapper>
+            <Skeleton width={320} height={220} />
+        </ImageWrapper>
+        <Info>
+            <Skeleton width={150} height={29} rounded />
+            <div style={{ height: '8px' }} />
+            <Skeleton width={200} height={19} rounded />
+        </Info>
+    </Container>
+)
+
 const Item: React.FC = () => {
     return (
         <Container>
@@ -67,11 +80,18 @@ const Item: React.FC = () => {
 }
 
 function App() {
+    const [loading, setLoading] = useState<boolean>(true);
+    useEffect(() => {
+        setTimeout(() => setLoading(false), 2000);
+    }, []);
+
   return (
     <Base>
         {
-            Array.from({length: 25}).map((_, idx) => (
-                <Item key={idx}></Item>
+            loading ?  Array.from({ length: 25 }).map((_, idx) => (
+                <Placeholder key={idx} />
+            )) : Array.from({ length: 25 }).map((_, idx) => (
+                <Item key={idx} />
             ))
         }
     </Base>
